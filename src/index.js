@@ -1,13 +1,9 @@
-import path from './helpers/path.js';
 import parse from './helpers/parse.js';
 import createString from './helpers/string.js';
 
 const genDiff = (oldFilePath, newFilePath) => {
-  const resolvedOldPath = path(oldFilePath);
-  const oldFile = parse(resolvedOldPath);
-
-  const resolvedNewPath = path(newFilePath);
-  const newFile = parse(resolvedNewPath);
+  const oldFile = parse(oldFilePath);
+  const newFile = parse(newFilePath);
 
   const obj = { ...oldFile, ...newFile };
   const keys = Object.keys(obj).sort();
