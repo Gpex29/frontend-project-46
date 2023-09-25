@@ -3,7 +3,8 @@ import parse from '../src/helpers/parse.js';
 import path from 'path';
 
 const getFixturePath = (filename) => path.resolve(`./__fixtures__/${filename}`);
-const file = getFixturePath('before.json');
+const filepathJSON = getFixturePath('before.json');
+const filepathYaml = getFixturePath('before.yaml');
 
 const result = {
   host: 'hexlet.io', 
@@ -13,5 +14,6 @@ const result = {
 };
 
 test('parse', () => {
-  expect(parse(file)).toEqual(result);
+  expect(parse(filepathJSON)).toEqual(result);
+  expect(parse(filepathYaml)).toEqual(result);
 });

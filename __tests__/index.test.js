@@ -7,7 +7,10 @@ const getFixturePath = (filename) => path.resolve(`./__fixtures__/${filename}`);
 
 const jsonBefore = getFixturePath('before.json');
 const jsonAfter = getFixturePath('after.json');
+const yamlBefore = getFixturePath('before.yaml');
+const yamlAfter = getFixturePath('after.yaml');
 const result = readFileSync(getFixturePath('result.txt'), 'utf-8');
 test('genDiff', () => {
   expect(genDiff(jsonBefore, jsonAfter)).toEqual(result);
+  expect(genDiff(yamlBefore, yamlAfter)).toEqual(result);
 });
