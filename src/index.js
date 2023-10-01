@@ -1,12 +1,13 @@
 import parse from './helpers/parse.js';
-import formatter from './stylish.js';
 import getDiffTree from './getDiffTree.js';
+import formatter from './formatters/index.js';
 
-const genDiff = (oldFilePath, newFilePath) => {
+const genDiff = (oldFilePath, newFilePath, format) => {
   const oldFile = parse(oldFilePath);
   const newFile = parse(newFilePath);
   const diffTree = getDiffTree(oldFile, newFile);
-  return formatter(diffTree);
+  const result = formatter(diffTree, format);
+  return result;
 };
 
 export default genDiff;
