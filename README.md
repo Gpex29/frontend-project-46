@@ -14,3 +14,5 @@
 [![genDiff(YAML)](https://asciinema.org/a/610264.svg)](https://asciinema.org/a/610264)
 
 [![genDiff(stylish)](https://asciinema.org/a/611437.svg)](https://asciinema.org/a/611437)
+
+[![genDiff with different formatters](https://asciinema.org/a/611477.svg)](https://asciinema.org/a/611477)
