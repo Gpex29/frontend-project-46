@@ -12,3 +12,5 @@
 [![genDiff(JSON)](https://asciinema.org/a/608762.svg)](https://asciinema.org/a/608762)
 
 [![genDiff(YAML)](https://asciinema.org/a/610264.svg)](https://asciinema.org/a/610264)
+
+[![genDiff(stylish)](https://asciinema.org/a/611437.svg)](https://asciinema.org/a/611437)
