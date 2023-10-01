@@ -1,26 +1,60 @@
-const formatter = (data) => {
-  const iter = (value, depth) => {
-    const length = 4;
-    const spacer = ' '.repeat(length);
+import isObject from './helpers/isObject.js';
+import stringify from './helpers/stringify.js';
+import getString from './helpers/getString.js';
+
+const formatter = (map) => {
+  const iter = (data, depth) => {
+    const spacer = '    ';
     const bracketSpacer = spacer.repeat(depth - 1);
     const currentSpacer = spacer.repeat(depth);
-    const keys = Object.keys(value);
+    const keys = Object.keys(data);
     const result = keys.map((key) => {
-      switch (value[key].status) {
+      const {
+        status, value, oldValue, newValue,
+      } = data[key];
+      switch (status) {
         case ('merged'): {
-          const nested = iter(value[key].children, depth + 1);
-          return `${currentSpacer}${key}: ${nested}`;
+          const nested = iter(data[key].children, depth + 1);
+          return getString(key, nested, currentSpacer);
         }
-        case ('added'):
-          return `${currentSpacer.slice(0, -2)}+ ${key}: ${value[key].value}`;
-        case ('deleted'):
-          return `${currentSpacer.slice(0, -2)}- ${key}: ${value[key].value}`;
-        case ('changed'):
-          return `${currentSpacer.slice(0, -2)}- ${key}: ${value[key].oldValue}\n${currentSpacer.slice(0, -2)}+ ${key}: ${value[key].newValue}`;
+        case ('added'): {
+          if (isObject(value)) {
+            const object = stringify(value, depth + 1);
+            return getString(key, object, currentSpacer, '+');
+          }
+          return getString(key, value, currentSpacer, '+');
+        }
+        case ('deleted'): {
+          if (isObject(value)) {
+            const object = stringify(value, depth + 1);
+            return getString(key, object, currentSpacer, '-');
+          }
+          return getString(key, value, currentSpacer, '-');
+        }
+        case ('changed'): {
+          if (isObject(oldValue)) {
+            const oldObject = stringify(oldValue, depth + 1);
+            return [
+              getString(key, oldObject, currentSpacer, '-'),
+              getString(key, newValue, currentSpacer, '+'),
+            ].join('\n');
+          }
+          if (isObject(newValue)) {
+            const newObject = stringify(oldValue, depth + 1);
+            return [
+              getString(key, oldValue, currentSpacer, '-'),
+              getString(key, newObject, currentSpacer, '+'),
+            ].join('\n');
+          }
+          return [
+            getString(key, oldValue, currentSpacer, '-'),
+            getString(key, newValue, currentSpacer, '+'),
+          ].join('\n');
+        }
         case ('unchanged'):
-          return `${currentSpacer}${key}: ${value[key].value}`;
+          return getString(key, value, currentSpacer);
         default:
-          throw new Error(`Unknown status: '${value[key].status}'!`);
+          throw new Error(`Unknown status: '${status}'!`);
       }
     });
     return [
@@ -29,7 +63,7 @@ const formatter = (data) => {
       `${bracketSpacer}}`,
     ].join('\n');
   };
-  return iter(data, 1);
+  return iter(map, 1);
 };
 
 export default formatter;

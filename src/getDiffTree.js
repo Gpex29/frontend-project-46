@@ -6,17 +6,17 @@ const getDiffTree = (oldFile, newFile) => {
   const result = keys.reduce((acc, key) => {
     const oldValue = oldFile[key];
     const newValue = newFile[key];
-    if (isObject(oldValue) && isObject(newValue)) { // merged
+    if (isObject(oldValue) && isObject(newValue)) {
       acc[key] = { status: 'merged', children: getDiffTree(oldValue, newValue) };
-    } else if (!Object.hasOwn(oldFile, key)) { // added
+    } else if (!Object.hasOwn(oldFile, key)) {
       acc[key] = { value: newValue, status: 'added' };
-    } else if (!Object.hasOwn(newFile, key)) { // deleted
+    } else if (!Object.hasOwn(newFile, key)) {
       acc[key] = { value: oldFile[key], status: 'deleted' };
-    } else if (oldFile[key] !== newValue) { // changed
+    } else if (oldFile[key] !== newValue) {
       acc[key] = {
         oldValue, newValue, status: 'changed',
       };
-    } else { // unchanged
+    } else {
       acc[key] = { value: oldFile[key], status: 'unchanged' };
     }
     return acc;
