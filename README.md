@@ -31,15 +31,19 @@ make install
 
 ## Application usage records :
 
-Simple data:
+### Simple data:
+
 [![genDiff(JSON)](https://asciinema.org/a/608762.svg)](https://asciinema.org/a/608762)
 [![genDiff(YAML)](https://asciinema.org/a/610264.svg)](https://asciinema.org/a/610264)
 
-Using stylish formatter:
+### Using stylish formatter:
+
 [![genDiff with stylish formatter](https://asciinema.org/a/611437.svg)](https://asciinema.org/a/611437)
 
-Using different formatters:
+### Using different formatters:
+
 [![genDiff with different formatters](https://asciinema.org/a/611477.svg)](https://asciinema.org/a/611477)
 
-Using json formatter:
+### Using json formatter:
+
 [![genDiff with json formatter](https://asciinema.org/a/611481.svg)](https://asciinema.org/a/611481)
