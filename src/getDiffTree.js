@@ -1,9 +1,13 @@
+import _ from 'lodash';
 import isObject from './helpers/isObject.js';
 
-const getDiffTree = (oldFile, newFile) => {
-  const obj = { ...oldFile, ...newFile };
-  const keys = Object.keys(obj).sort();
-  const result = keys.reduce((acc, key) => {
+const getDiffTree = (before, after) => {
+  const obj = { ...before, ...after };
+  const keys = Object.keys(obj);
+  const sortedKeys = _.sortBy(keys);
+  const result = sortedKeys.reduce((acc, key) => {
+    const oldFile = { ...before };
+    const newFile = { ...after };
     const oldValue = oldFile[key];
     const newValue = newFile[key];
     if (isObject(oldValue) && isObject(newValue)) {
