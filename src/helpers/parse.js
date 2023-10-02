@@ -11,6 +11,8 @@ const parse = (filepath) => {
       return JSON.parse(readFileSync(getFilePath));
     case '.yaml':
       return yaml.load(readFileSync(getFilePath));
+    case '.yml':
+      return yaml.load(readFileSync(getFilePath));
     default:
       throw new Error(`Unknown extension: '${extension}'!`);
   }
