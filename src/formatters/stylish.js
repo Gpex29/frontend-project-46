@@ -40,7 +40,7 @@ const stylish = (map) => {
             ].join('\n');
           }
           if (isObject(newValue)) {
-            const newObject = stringify(oldValue, depth + 1);
+            const newObject = stringify(newValue, depth + 1);
             return [
               getString(key, oldValue, currentSpacer, '-'),
               getString(key, newObject, currentSpacer, '+'),

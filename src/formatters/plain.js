@@ -1,6 +1,4 @@
-import isObject from '../helpers/isObject.js';
-
-const isFalsyTruthyNull = (value) => value === null || value === true || value === false;
+import getPlainValue from '../helpers/getPlainValue.js';
 
 const plain = (map) => {
   const iter = (data, nestedKey) => {
@@ -13,33 +11,12 @@ const plain = (map) => {
       switch (status) {
         case ('merged'):
           return iter(data[key].children, currentKey);
-        case ('added'): {
-          if (isObject(value)) {
-            return `Property '${currentKey}' was added with value: [complex value]`;
-          }
-          if (isFalsyTruthyNull(value)) {
-            return `Property '${currentKey}' was added with value: ${value}`;
-          }
-          return `Property '${currentKey}' was added with value: '${value}'`;
-        }
-        case ('deleted'): {
-          if (isObject(value)) {
-            return `Property '${currentKey}' was removed`;
-          }
+        case ('added'):
+          return `Property '${currentKey}' was added with value: ${getPlainValue(value)}`;
+        case ('deleted'):
           return `Property '${currentKey}' was removed`;
-        }
-        case ('changed'): {
-          if (isObject(oldValue)) {
-            return `Property '${currentKey}' was updated. From [complex value] to '${newValue}'`;
-          }
-          if (isObject(newValue)) {
-            return `Property '${currentKey}' was updated. From '${oldValue}' to [complex value]`;
-          }
-          if (isFalsyTruthyNull(oldValue) && isFalsyTruthyNull(newValue)) {
-            return `Property '${currentKey}' was updated. From ${oldValue} to ${newValue}`;
-          }
-          return `Property '${currentKey}' was updated. From '${oldValue}' to '${newValue}'`;
-        }
+        case ('changed'):
+          return `Property '${currentKey}' was updated. From ${getPlainValue(oldValue)} to ${getPlainValue(newValue)}`;
         case ('unchanged'):
           return '';
         default:
