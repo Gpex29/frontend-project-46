@@ -1,6 +1,6 @@
 import { test, expect } from '@jest/globals';
-import parse from '../src/helpers/parse.js';
 import path from 'path';
+import parse from '../src/helpers/parse.js';
 
 const getFixturePath = (filename) => path.resolve(`./__fixtures__/${filename}`);
 const filepathJSON = getFixturePath('before.json');
@@ -9,29 +9,29 @@ const filepathYml = getFixturePath('test.yml');
 
 const result = {
   common: {
-    setting1: "Value 1",
+    setting1: 'Value 1',
     setting2: 200,
     setting3: true,
     setting6: {
-      key: "value",
+      key: 'value',
       doge: {
-        wow: ""
-      }
-    }
+        wow: '',
+      },
+    },
   },
   group1: {
-    baz: "bas",
-    foo: "bar",
+    baz: 'bas',
+    foo: 'bar',
     nest: {
-      key: "value"
-    }
+      key: 'value',
+    },
   },
   group2: {
     abc: 12345,
     deep: {
-      id: 45
-    }
-  }
+      id: 45,
+    },
+  },
 };
 
 test('parse', () => {
