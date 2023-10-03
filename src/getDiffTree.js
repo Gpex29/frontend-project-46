@@ -6,25 +6,25 @@ const getDiffTree = (before, after) => {
   const keys = Object.keys(obj);
   const sortedKeys = _.sortBy(keys);
   const result = sortedKeys.reduce((acc, key) => {
-    const newAcc = { ...acc };
     const oldFile = { ...before };
     const newFile = { ...after };
     const oldValue = oldFile[key];
     const newValue = newFile[key];
     if (isObject(oldValue) && isObject(newValue)) {
-      newAcc[key] = { status: 'merged', children: getDiffTree(oldValue, newValue) };
-    } else if (!Object.hasOwn(oldFile, key)) {
-      newAcc[key] = { value: newValue, status: 'added' };
-    } else if (!Object.hasOwn(newFile, key)) {
-      newAcc[key] = { value: oldFile[key], status: 'deleted' };
-    } else if (oldFile[key] !== newValue) {
-      newAcc[key] = {
-        oldValue, newValue, status: 'changed',
+      return { ...acc, [key]: { status: 'merged', children: getDiffTree(oldValue, newValue) } };
+    } if (!Object.hasOwn(oldFile, key)) {
+      return { ...acc, [key]: { value: newValue, status: 'added' } };
+    } if (!Object.hasOwn(newFile, key)) {
+      return { ...acc, [key]: { value: oldValue, status: 'deleted' } };
+    } if (oldValue !== newValue) {
+      return {
+        ...acc,
+        [key]: {
+          oldValue, newValue, status: 'changed',
+        },
       };
-    } else {
-      newAcc[key] = { value: oldFile[key], status: 'unchanged' };
     }
-    return newAcc;
+    return { ...acc, [key]: { value: oldValue, status: 'unchanged' } };
   }, {});
   return result;
 };
