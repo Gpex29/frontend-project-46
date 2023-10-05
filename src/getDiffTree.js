@@ -1,31 +1,24 @@
 import _ from 'lodash';
-import isObject from './helpers/isObject.js';
 
-const getDiffTree = (before, after) => {
-  const obj = { ...before, ...after };
-  const keys = Object.keys(obj);
+const getDiffTree = (file1, file2) => {
+  const keys = _.union(_.keys(file1), _.keys(file2));
   const sortedKeys = _.sortBy(keys);
-  const result = sortedKeys.reduce((acc, key) => {
-    const oldFile = { ...before };
-    const newFile = { ...after };
-    const oldValue = oldFile[key];
-    const newValue = newFile[key];
-    if (isObject(oldValue) && isObject(newValue)) {
-      return { ...acc, [key]: { status: 'merged', children: getDiffTree(oldValue, newValue) } };
-    } if (!Object.hasOwn(oldFile, key)) {
-      return { ...acc, [key]: { value: newValue, status: 'added' } };
-    } if (!Object.hasOwn(newFile, key)) {
-      return { ...acc, [key]: { value: oldValue, status: 'deleted' } };
-    } if (oldValue !== newValue) {
+  const result = sortedKeys.map((key) => {
+    const value1 = { ...file1 }[key];
+    const value2 = { ...file2 }[key];
+    if (_.isPlainObject(value1) && _.isPlainObject(value2)) {
+      return { key, type: 'nested', children: getDiffTree(value1, value2) };
+    } if (!Object.hasOwn(file1, key)) {
+      return { key, value: value2, type: 'added' };
+    } if (!Object.hasOwn(file2, key)) {
+      return { key, value: value1, type: 'removed' };
+    } if (value1 !== value2) {
       return {
-        ...acc,
-        [key]: {
-          oldValue, newValue, status: 'changed',
-        },
+        key, value1, value2, type: 'updated',
       };
     }
-    return { ...acc, [key]: { value: oldValue, status: 'unchanged' } };
-  }, {});
+    return { key, value: value1, type: 'equal' };
+  });
   return result;
 };
 

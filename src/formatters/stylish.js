@@ -1,60 +1,35 @@
-import isObject from '../helpers/isObject.js';
 import stringify from '../helpers/stringify.js';
-import getString from '../helpers/getString.js';
 
 const stylish = (map) => {
   const iter = (data, depth) => {
     const spacer = '    ';
     const bracketSpacer = spacer.repeat(depth - 1);
     const currentSpacer = spacer.repeat(depth);
-    const keys = Object.keys(data);
-    const result = keys.map((key) => {
-      const {
-        status, value, oldValue, newValue,
-      } = data[key];
-      switch (status) {
-        case ('merged'): {
-          const nested = iter(data[key].children, depth + 1);
-          return getString(key, nested, currentSpacer);
+    const signSpacer = currentSpacer.slice(0, -2);
+
+    const result = data.map((obj) => {
+      const { key, type } = obj;
+      switch (type) {
+        case ('nested'): {
+          const nested = iter(obj.children, depth + 1);
+          return `${currentSpacer}${key}: ${nested}`;
         }
         case ('added'): {
-          if (isObject(value)) {
-            const object = stringify(value, depth + 1);
-            return getString(key, object, currentSpacer, '+');
-          }
-          return getString(key, value, currentSpacer, '+');
+          return `${signSpacer}+ ${key}: ${stringify(obj.value, depth + 1)}`;
         }
-        case ('deleted'): {
-          if (isObject(value)) {
-            const object = stringify(value, depth + 1);
-            return getString(key, object, currentSpacer, '-');
-          }
-          return getString(key, value, currentSpacer, '-');
+        case ('removed'): {
+          return `${signSpacer}- ${key}: ${stringify(obj.value, depth + 1)}`;
         }
-        case ('changed'): {
-          if (isObject(oldValue)) {
-            const oldObject = stringify(oldValue, depth + 1);
-            return [
-              getString(key, oldObject, currentSpacer, '-'),
-              getString(key, newValue, currentSpacer, '+'),
-            ].join('\n');
-          }
-          if (isObject(newValue)) {
-            const newObject = stringify(newValue, depth + 1);
-            return [
-              getString(key, oldValue, currentSpacer, '-'),
-              getString(key, newObject, currentSpacer, '+'),
-            ].join('\n');
-          }
+        case ('updated'): {
           return [
-            getString(key, oldValue, currentSpacer, '-'),
-            getString(key, newValue, currentSpacer, '+'),
+            `${signSpacer}- ${key}: ${stringify(obj.value1, depth + 1)}`,
+            `${signSpacer}+ ${key}: ${stringify(obj.value2, depth + 1)}`,
           ].join('\n');
         }
-        case ('unchanged'):
-          return getString(key, value, currentSpacer);
+        case ('equal'):
+          return `${currentSpacer}${key}: ${obj.value}`;
         default:
-          throw new Error(`Unknown status: '${status}'!`);
+          throw new Error(`Unknown status: '${type}'!`);
       }
     });
     return [

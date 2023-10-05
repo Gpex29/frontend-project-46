@@ -1,15 +1,14 @@
 import stylish from './stylish.js';
 import plain from './plain.js';
-import json from './json.js';
 
-const formatter = (map, formatterName) => {
-  switch (formatterName) {
+const formate = (data, formatter) => {
+  switch (formatter) {
     case 'plain':
-      return plain(map);
+      return plain(data);
     case 'json':
-      return json(map);
+      return JSON.stringify(data);
     default:
-      return stylish(map);
+      return stylish(data);
   }
 };
-export default formatter;
+export default formate;
