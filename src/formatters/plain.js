@@ -1,13 +1,13 @@
 import _ from 'lodash';
 
 const getPlainValue = (value) => {
-  if (value === null || value === true || value === false || value === Number(value)) {
-    return `${value}`;
+  if (typeof value === 'string') {
+    return `'${value}'`;
   }
   if (_.isPlainObject(value)) {
     return '[complex value]';
   }
-  return `'${value}'`;
+  return `${value}`;
 };
 
 const plain = (map) => {

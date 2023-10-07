@@ -12,7 +12,7 @@ const getDiffTree = (file1, file2) => {
       return { key, value: value2, type: 'added' };
     } if (!Object.hasOwn(file2, key)) {
       return { key, value: value1, type: 'removed' };
-    } if (value1 !== value2) {
+    } if (!_.isEqual(value1, value2)) {
       return {
         key, value1, value2, type: 'updated',
       };
