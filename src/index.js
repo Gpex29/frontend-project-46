@@ -9,14 +9,14 @@ const genDiff = (filepath1, filepath2, format = 'stylish') => {
   const getFilePath1 = getPath(filepath1);
   const extension1 = extname(getFilePath1).slice(1);
   const readFile1 = readFileSync(getFilePath1);
-  const fileData1 = parse(readFile1, extension1);
+  const content1 = parse(readFile1, extension1);
 
   const getFilePath2 = getPath(filepath2);
   const extension2 = extname(getFilePath2).slice(1);
   const readFile2 = readFileSync(getFilePath2);
-  const fileData2 = parse(readFile2, extension2);
+  const content2 = parse(readFile2, extension2);
 
-  const diffTree = getDiffTree(fileData1, fileData2);
+  const diffTree = getDiffTree(content1, content2);
   return formate(diffTree, format);
 };
 
