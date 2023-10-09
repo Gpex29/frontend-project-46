@@ -4,8 +4,8 @@ const getDiffTree = (file1, file2) => {
   const keys = _.union(_.keys(file1), _.keys(file2));
   const sortedKeys = _.sortBy(keys);
   const result = sortedKeys.map((key) => {
-    const value1 = { ...file1 }[key];
-    const value2 = { ...file2 }[key];
+    const value1 = file1[key];
+    const value2 = file2[key];
     if (_.isPlainObject(value1) && _.isPlainObject(value2)) {
       return { key, type: 'nested', children: getDiffTree(value1, value2) };
     } if (!Object.hasOwn(file1, key)) {
